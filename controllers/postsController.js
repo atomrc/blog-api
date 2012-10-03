@@ -9,7 +9,7 @@ exports.index = function(req, res) {
 }
 
 exports.show = function(req, res) {
-    var post = Post.find({slug: req.params.slug}, function( err, post ) {
+    var post = Post.findById(req.params.id, function( err, post ) {
         if( err ) throw new Exception(err);
         res.send(post);
     });

@@ -1,4 +1,3 @@
-
 /**
  * Module dependencies.
  */
@@ -14,7 +13,7 @@ require('./config/routes')(app);
 
 //database
 var dbSettings = app.settings.db;
-mongoose.connect('mongodb://'+ dbSettings.host +":"+ dbSettings.port +"/"+ dbSettings.database);
+mongoose.connect('mongodb://'+dbSettings.user+':'+dbSettings.password+'@'+ dbSettings.host +":"+ dbSettings.port +"/"+ dbSettings.database);
 
 app.listen(app.settings.port, function(){
     console.log("Express server listening on port %d in %s mode",
