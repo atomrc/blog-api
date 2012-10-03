@@ -1,0 +1,29 @@
+// Configuration
+module.exports = function(app, express) {
+    app.configure(function(){
+        app.set('views', __dirname + '/views');
+        app.set('view engine', 'jade');
+
+        app.use(express.bodyParser());
+        app.use(express.methodOverride());
+        app.use(app.router);
+        app.use(express.static(__dirname + '/public'));
+    });
+
+    app.configure('development', function(){
+        app.set('port', 1337);
+        app.set('db', {
+            'host' : '127.0.0.1',
+            'port' : '27017',
+            'user' : 'root',
+            'password' : 'root',
+            'database' : 'blog',
+        });
+        app.use(express.errorHandler({ dumpExceptions: true, showStack: true }));
+    });
+
+    app.configure('production', function(){
+        app.set('port', 80);
+        app.use(express.errorHandler());
+    });
+}

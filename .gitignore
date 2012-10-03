@@ -1,0 +1,10 @@
+#MacOs files
+.DS_Store
+#vim swap files
+*.swp
+
+#configuration file
+configure.js
+
+#node modules
+node_modules
