@@ -1,19 +1,18 @@
 var mongoose = require('mongoose'),
-    utils = require('../libs/utils'),
-    Schema = mongoose.Schema,
+    utils    = require('../libs/utils'),
+    Schema   = mongoose.Schema,
     ObjectId = Schema.ObjectId,
-    Comment = require('../models/Comment');
+    Comment  = require('../models/Comment');
 
 var PostSchema = new Schema({
-    id: ObjectId,
-    title: String,
-    slug: String,
-    created_at: Date,
-    comments: [Comment.schema],
-}, { versionKey: "version" });
+    id:           ObjectId,
+    title:        String,
+    slug:         String,
+    created_at:   {type: Date, default: Date.now},
+    comments:     [Comment.schema],
+}, { versionKey:  "version" });
 
 PostSchema.pre('save', function(next) {
-    this.created_at = new Date;
     if( !this.title ) next();
     this.slug = utils.slugify(this.title);
     next();

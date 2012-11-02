@@ -1,6 +1,6 @@
 var mongoose = require('mongoose');
-var Post = require('../models/Post');
-var Comment = require('../models/Comment');
+var Post     = require('../models/Post');
+var Comment  = require('../models/Comment');
 var NotFound = require('../libs/errors').NotFound;
 
 exports.index = function(req, res) {
@@ -26,13 +26,28 @@ exports.comment = function(req, res) {
     var comment = new Comment(req.body);
     post.comments.push(comment);
     post.save(function( err, post) {
-        if(err) throw new Error(err);
+        if(err) res.send(err);
         res.send(post);
     });
+
+    /*Post.findByIdAndUpdate(
+        req.params.post_id,
+        {$push : {comments: req.body}},
+        function( err, post ) {
+            if( err ) throw new NotFound;
+            res.send(post);
+        }
+    );*/
 }
 
 exports.deleteComment = function(req, res) {
-    res.send(req.comment);
+    Post.findByIdAndUpdate(
+        req.params.post_id,
+        {$pull : {comments: { _id: req.params.comment_id }}},
+        function( err, post ) {
+            res.send(post);
+        }
+    );
 }
 
 exports.update = function(req, res) {

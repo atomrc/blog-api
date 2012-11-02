@@ -1,8 +1,8 @@
-var controllers = require('../controllers');
-var passport = require('passport');
+var controllers  = require('../controllers');
+var passport     = require('passport');
 var Unauthorized = require('../libs/errors').Unauthorized;
-var NotFound = require('../libs/errors').NotFound;
-var Post = require('../models/Post');
+var NotFound     = require('../libs/errors').NotFound;
+var Post         = require('../models/Post');
 
 var authenticateApp = function(req, res, next) {
     if(!req.query.apiKey) throw new Unauthorized;
@@ -15,15 +15,6 @@ var loadPost = function(req, res, next) {
         if( err ) return next(new NotFound);
         if( !post ) return next(new NotFound);
         req.post = post;
-        next();
-    });
-}
-
-var loadComment = function(req, res, next) {
-    req.post.comments.findById(req.params.comment_id, function(err, comment) {
-        if( err ) return next(new NotFound);
-        if( !comment ) return next(new NotFound);
-        req.comment = comment;
         next();
     });
 }
@@ -43,6 +34,7 @@ module.exports = function(app) {
     app.delete('/posts/:post_id', authenticateApp, loadPost, controllers.postsController.delete);
     app.put('/posts/:post_id', authenticateApp, controllers.postsController.update);
 
-    app.post('/posts/:post_id/comments/:comment_id', loadPost, controllers.postsController.comment);
-    app.delete('/posts/:post_id/comments/:comment_id', loadPost, loadComment, controllers.postsController.deleteComment);
+    //COMMENTS
+    app.post('/posts/:post_id/comments', loadPost, controllers.postsController.comment);
+    app.delete('/posts/:post_id/comments/:comment_id', authenticateApp, loadPost, controllers.postsController.deleteComment);
 }
