@@ -7,6 +7,8 @@ var mongoose = require('mongoose'),
 var PostSchema = new Schema({
     id:           ObjectId,
     title:        String,
+    description:  String,
+    body:         String,
     slug:         String,
     created_at:   {type: Date, default: Date.now},
     comments:     [Comment.schema],
