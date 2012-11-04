@@ -5,7 +5,7 @@ var NotFound     = require('../libs/errors').NotFound;
 var Post         = require('../models/Post');
 
 var authenticateApp = function(req, res, next) {
-    if(!req.query.apiKey) throw new Unauthorized;
+    if(!req.query.apiKey) return next(new Unauthorized);
     //TODO check if apiKey is authorized
     return next();
 }
@@ -13,9 +13,9 @@ var authenticateApp = function(req, res, next) {
 var loadPost = function(req, res, next) {
     Post.findOne({slug: req.params.post_slug}, function(err, post) {
         if( err ) return next(new NotFound);
-        if( !post ) return next(new NotFound);
+        if( post === null ) return next(new NotFound);
         req.post = post;
-        next();
+        return next();
     });
 }
 
